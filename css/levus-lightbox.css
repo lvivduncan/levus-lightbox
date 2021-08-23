@@ -1,0 +1,90 @@
+
+/* for test */
+.wrapper
+{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    grid-gap: 20px;
+    width: 996px;
+    margin: auto;
+}
+
+@media(max-width:1000px)
+{
+    .wrapper
+    {
+        width: 95%;
+    }
+}
+
+@media(max-width:776px)
+{
+    .wrapper
+    {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+@media(max-width:500px)
+{
+    .wrapper
+    {
+        grid-template-columns: 1fr;
+    }
+}
+
+.wrapper img
+{
+    max-width: 100%;
+    height: auto;
+}
+/* for test */
+
+
+*,::after,::before
+{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html,
+body
+{
+    height: 100%;
+}
+
+/* body.body-levus-lightbox
+{
+    position: relative;
+} */
+
+/* add padding for scroll */
+/* body.body-levus-lightbox-shift
+{
+    padding-right: 15px;
+} */
+
+/* fixed for click */
+/* body.body-levus-lightbox-fixed
+{
+    overflow: hidden;
+} */
+
+/* created block for full images */
+/* #levus-full-image
+{
+    position: absolute;
+    background: rgba(0,0,0,.2);
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    display: none;
+} */
+
+/* #levus-full-image.active
+{
+    display: block;
+} */
