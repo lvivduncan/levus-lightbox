@@ -23,17 +23,24 @@ bg.setAttribute('id', 'levus-bg');
 bg.style.cssText = 'position:absolute;z-index:2;background:rgba(0,0,0,.3);top:0;left:0;width:100vw;height:100vh;display:block;';
 
 // array with full images
-const arr = [];
+const elements = [];
+
+// translateX
+let translate = [];
 
 for(let i = 0, length = images.length; i<length; i++){
 
+    // temp var
     const img = images[i];
 
-    // get full images
-    arr.push(img.parentNode.href);
+    // fill full images
+    elements.push(img.parentNode.href);
 
-    img.addEventListener('click', function(e) {
-        e.preventDefault();
+    // set data-attr
+    images[i].dataset.id = i;
+
+    img.addEventListener('click', function(event) {
+        event.preventDefault();
 
         // add fixed for body
         body.style.overflow = 'hidden';
@@ -44,17 +51,20 @@ for(let i = 0, length = images.length; i<length; i++){
             body.style.paddingRight = '15px';
         }
 
-        render();
-
+        // e.target change to this
+        // render(event);
+        render(this);
     });
 
 }
 
+translateDefault();
+
 // check insert divs
 let insertFlag = false;
 
-// temporary images elements
-let fragment = new DocumentFragment();
+/* // temporary images elements
+const fragment = new DocumentFragment();
 
 // create full images
 for(let i = 0, length = images.length; i<length; i++){
@@ -62,27 +72,21 @@ for(let i = 0, length = images.length; i<length; i++){
     const img = document.createElement('img');
     img.src = href[i].href;
 
-
-    console.log(href[i].offsetHeight, href[i].offsetWidth)
-
-
+    // set default options
     img.style.cssText = 'position:absolute;top:0;left:0;';
 
-    // last element set -100
-    if(i === length-1){
-        
-        img.style.cssText = 'transform:translateX(-100%)';
-    } else {
-        
-        img.style.cssText = `transform:translateX(${i * 100}%)`;
-    }
+    // set translate 
+    img.style.cssText = `transform:translateX(${translate[i]}%)`;
+
+    // set data-attr
+    img.dataset.id = i;
 
     fragment.append(img);
-}
+} */
 
-document.addEventListener('click', e => {
+document.addEventListener('click', event => {
 
-    if(e.target.id === 'levus-bg'){
+    if(event.target.id === 'levus-bg'){
 
         // removed divs
         wiev.remove();
@@ -91,23 +95,47 @@ document.addEventListener('click', e => {
         body.style.paddingRight = '';
         body.style.overflow = '';
 
+        // reset translate array
+        translateDefault();
+
         // flag set null
         insertFlag = false;
     }
 });
 
 
-// not exists! TODO: used event!
-wiev.querySelectorAll('img').forEach(img => {
-    console.log('wiev img')
-
-    img.addEventListener('click', function() {
-        console.log(this);
-    });
-});
-
 // wiev full image
-function render(){
+function render(self){
+
+    // item id
+    const id = self.dataset.id;
+
+    // TODO: shift() and push()
+    for(let i = 0; i < id; i++){
+        let first = translate.pop(i);
+        translate.unshift(first);
+    }
+
+    // temporary images elements
+    const fragment = new DocumentFragment();
+
+    // create full images
+    for(let i = 0, length = images.length; i<length; i++){
+
+        const img = document.createElement('img');
+        img.src = href[i].href;
+
+        // set default options
+        img.style.cssText = 'position:absolute;top:0;left:0;width:800px;height:600px;object-fit:cover;';
+
+        // set translate 
+        img.style.transform = `translateX(${translate[i]}%)`;
+
+        // set data-attr
+        img.dataset.id = i;
+
+        fragment.append(img);
+    }
 
     // check gallery. render divs if gallery exists
     if(insertFlag === false){
@@ -131,6 +159,22 @@ function render(){
     wiev.append(fragment);
 }
 
+// fill default data and reset
+function translateDefault(){
+    translate = [];
+        
+    for(let i = 0, length = images.length; i<length; i++){
+    
+        // fill transform 
+        if(i === length-1){
+            
+            translate.push(-100);
+        } else {
+    
+            translate.push(i * 100);
+        }
+    }
+}
 
 
 
