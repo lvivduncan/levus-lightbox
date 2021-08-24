@@ -116,44 +116,64 @@ function render(self){
         translate.unshift(first);
     }
 
-    // temporary images elements
-    const fragment = new DocumentFragment();
+    // // temporary images elements
+    // const fragment = new DocumentFragment();
 
-    if(fragmentFlag === false){
+    // // for clone only 1 time
+    // if(fragmentFlag === false){
 
-        // create full images
-        for(let i = 0, length = images.length; i<length; i++){
+    //     // create full images
+    //     for(let i = 0, length = images.length; i<length; i++){
 
-            const img = document.createElement('img');
-            img.src = bigImages[i].href;
+    //         const img = document.createElement('img');
+    //         img.src = bigImages[i].href;
 
-            // set default options
-            img.style.cssText = `
-                position:absolute;
-                top:0;
-                left:0;
-                width:${width}px;
-                height:${height}px;
-                object-fit:cover;
-                transform:translateX(${translate[i]}%);`;
+    //         // set default options // width:${width}px; height:${height}px;
+    //         img.style.cssText = `
+    //             position:absolute;
+    //             top:0;
+    //             left:0;
+    //             width:100%;
+    //             height:100%;
+    //             object-fit:cover;
+    //             transform:translateX(${translate[i]}%);`;
 
-            // set data-attr (del?)
-            img.dataset.id = i;
+    //         // set data-attr (del?)
+    //         // img.dataset.id = i;
 
-            fragment.append(img);
+    //         fragment.append(img);
 
-            // insert full images after click
-            wiev.append(fragment);
-        }        
+    //         // insert full images after click
+    //         wiev.append(fragment);
 
-        fragmentFlag = true;
+    //         // console.log(fragment.content)
+    //     }        
+
+    //     fragmentFlag = true;
+    // }
+
+    // inline fragment for insert
+    let fragment = '';
+    
+    for(let i = 0, length = images.length; i<length; i++){
+
+        fragment += `<img src="${bigImages[i].href}" alt="" style="transform:translateX(${translate[i]}%);">`;
     }
+
+    wiev.innerHTML = fragment;
 
     // check gallery. render divs if gallery exists
     if(insertFlag === false){
 
         // якщо розмір десктопний 4:3, якщо мобільний 3:4?
-        wiev.style.cssText = `width:800px;height:600px;top:calc(50% - 300px);left:calc(50% - 400px);overflow:hidden;position:fixed;z-index:3;`;
+        wiev.style.cssText = `
+            width:${width}px;
+            height:${height}px;
+            top:calc(50% - ${height/2}px);
+            left:calc(50% - ${width/2}px);
+            overflow:hidden;
+            position:fixed;
+            z-index:3;`;
 
         // insert
         body.append(wiev);
@@ -186,3 +206,4 @@ function translateDefault(){
 
 // TODO: close before mousedown 'esc'
 // TODO: left and right scroll from keyboard
+

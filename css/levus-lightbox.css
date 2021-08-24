@@ -54,37 +54,6 @@ body
     height: 100%;
 }
 
-/* body.body-levus-lightbox
-{
-    position: relative;
-} */
-
-/* add padding for scroll */
-/* body.body-levus-lightbox-shift
-{
-    padding-right: 15px;
-} */
-
-/* fixed for click */
-/* body.body-levus-lightbox-fixed
-{
-    overflow: hidden;
-} */
-
-/* created block for full images */
-/* #levus-full-image
-{
-    position: absolute;
-    background: rgba(0,0,0,.2);
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-
-    display: none;
-} */
-
-/* #levus-full-image.active
-{
-    display: block;
-} */
+#levus-full img{
+    position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;
+}
