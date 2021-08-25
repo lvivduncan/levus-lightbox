@@ -1,5 +1,5 @@
 // 23-08-2021
-
+    
 // 1 gallery. TODO: all gallery
 const gallery = document.querySelector('.levus-lightbox');
 
@@ -14,16 +14,11 @@ body.style.position = 'relative';
 
 // create full block
 const wiev = document.createElement('div');
-wiev.setAttribute('id', 'levus-full');
-// wiev.style.cssText = 'position:fixed;z-index:3;max-width:95%;height:auto;display:block;overflow:hidden;';
+wiev.setAttribute('id', 'levus-lightbox-wiev');
 
-// create block to click for close
-const bg = document.createElement('div');
-bg.setAttribute('id', 'levus-bg');
-bg.style.cssText = 'position:fixed;z-index:2;background:rgba(0,0,0,.3);top:0;left:0;width:100vw;height:100vh;display:block;';
-
-// array with full images
-const elements = [];
+// create click-block for close
+const backwrapper = document.createElement('div');
+backwrapper.setAttribute('id', 'levus-lightbox-backwrapper');
 
 // translateX
 let translate = [];
@@ -32,9 +27,6 @@ for(let i = 0, length = images.length; i<length; i++){
 
     // temp var
     const img = images[i];
-
-    // fill full images
-    elements.push(img.parentNode.href);
 
     // set data-attr
     images[i].dataset.id = i;
@@ -66,23 +58,22 @@ let insertFlag = false;
 // check fragment 
 let fragmentFlag = false;
 
-document.addEventListener('click', event => {
+// close window
+backwrapper.addEventListener('click', () => {
 
-    if(event.target.id === 'levus-bg'){
+    // removed divs
+    wiev.remove();
+    backwrapper.remove();
 
-        // removed divs
-        wiev.remove();
-        bg.remove();
+    body.style.paddingRight = '';
+    body.style.overflow = '';
 
-        body.style.paddingRight = '';
-        body.style.overflow = '';
+    // reset translate array
+    translateDefault();
 
-        // reset translate array
-        translateDefault();
+    // flag set null
+    insertFlag = false;
 
-        // flag set null
-        insertFlag = false;
-    }
 });
 
 // set window height 
@@ -101,7 +92,7 @@ window.addEventListener('resize', () => {
 // wiev full image
 function render(self){
 
-    console.log(innerHeight, innerWidth)
+    console.log('innerHeight: ',innerHeight, 'innerWidth: ', innerWidth)
 
     // TODO: widht and height proportions
     let width = innerWidth - 40; // 40 -- padding
@@ -115,42 +106,6 @@ function render(self){
         let first = translate.pop(i);
         translate.unshift(first);
     }
-
-    // // temporary images elements
-    // const fragment = new DocumentFragment();
-
-    // // for clone only 1 time
-    // if(fragmentFlag === false){
-
-    //     // create full images
-    //     for(let i = 0, length = images.length; i<length; i++){
-
-    //         const img = document.createElement('img');
-    //         img.src = bigImages[i].href;
-
-    //         // set default options // width:${width}px; height:${height}px;
-    //         img.style.cssText = `
-    //             position:absolute;
-    //             top:0;
-    //             left:0;
-    //             width:100%;
-    //             height:100%;
-    //             object-fit:cover;
-    //             transform:translateX(${translate[i]}%);`;
-
-    //         // set data-attr (del?)
-    //         // img.dataset.id = i;
-
-    //         fragment.append(img);
-
-    //         // insert full images after click
-    //         wiev.append(fragment);
-
-    //         // console.log(fragment.content)
-    //     }        
-
-    //     fragmentFlag = true;
-    // }
 
     // inline fragment for insert
     let fragment = '';
@@ -178,7 +133,7 @@ function render(self){
         // insert
         body.append(wiev);
 
-        body.append(bg);
+        body.append(backwrapper);
 
         insertFlag = true;
     }
@@ -201,9 +156,8 @@ function translateDefault(){
         }
     }
 
-    console.log(translate)
+    // console.log(translate)
 }
 
 // TODO: close before mousedown 'esc'
 // TODO: left and right scroll from keyboard
-
