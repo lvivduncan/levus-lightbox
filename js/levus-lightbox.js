@@ -29,7 +29,7 @@ for(let i = 0, length = images.length; i<length; i++){
     const img = images[i];
 
     // set data-attr
-    images[i].dataset.id = i;
+    img.dataset.id = i;
 
     img.addEventListener('click', function(event) {
         event.preventDefault();
@@ -107,15 +107,7 @@ function render(self){
         translate.unshift(first);
     }
 
-    // inline fragment for insert
-    let fragment = '';
-    
-    for(let i = 0, length = images.length; i<length; i++){
-
-        fragment += `<img src="${bigImages[i].href}" alt="" style="transform:translateX(${translate[i]}%);">`;
-    }
-
-    wiev.innerHTML = fragment;
+    wiev.innerHTML = returnFragment();
 
     // check gallery. render divs if gallery exists
     if(insertFlag === false){
@@ -155,9 +147,45 @@ function translateDefault(){
             translate.push(i * 100);
         }
     }
-
-    // console.log(translate)
 }
+
+function returnFragment(){
+
+    // inline fragment for insert
+    let fragment = '';
+    
+    for(let i = 0, length = images.length; i<length; i++){
+
+        fragment += `<img src="${bigImages[i].href}" alt="" style="transform:translateX(${translate[i]}%);">`;
+    }
+
+    return fragment;
+}
+
+
+// test sizes
+const tempArr = [];
+
+let img = new Image();
+
+img.onload = function() {
+  console.log(img.width, img.height)
+
+  for(let i = 0, length = images.length; i<length; i++){
+
+    tempArr.push({num: i, width: img.width, height: img.height});
+  }
+};
+
+for(let i = 0, length = images.length; i<length; i++){
+
+    img.src = bigImages[i].href;
+}
+
+console.log(tempArr)
+
+
+
 
 // TODO: close before mousedown 'esc'
 // TODO: left and right scroll from keyboard
