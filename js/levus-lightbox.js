@@ -1,191 +1,223 @@
 // 23-08-2021
-    
-// 1 gallery. TODO: all gallery
-const gallery = document.querySelector('.levus-lightbox');
 
-// links to full image
-const bigImages = gallery.querySelectorAll('a');
+// window.addEventListener('load', function(){
+        
+    // 1 gallery. TODO: all gallery
+    const gallery = document.querySelector('.levus-lightbox');
 
-// small images
-const images = gallery.querySelectorAll('img');
+    // links to full image
+    const bigImages = gallery.querySelectorAll('a');
 
-const body = document.getElementsByTagName('body')[0];
-body.style.position = 'relative';
+    // small images
+    const images = gallery.querySelectorAll('img');
 
-// create full block
-const wiev = document.createElement('div');
-wiev.setAttribute('id', 'levus-lightbox-wiev');
+    const body = document.getElementsByTagName('body')[0];
+    body.style.position = 'relative';
 
-// create click-block for close
-const backwrapper = document.createElement('div');
-backwrapper.setAttribute('id', 'levus-lightbox-backwrapper');
+    // create full block
+    const wiev = document.createElement('div');
+    wiev.setAttribute('id', 'levus-lightbox-wiev');
 
-// translateX
-let translate = [];
+    // create click-block for close
+    const backwrapper = document.createElement('div');
+    backwrapper.setAttribute('id', 'levus-lightbox-backwrapper');
 
-for(let i = 0, length = images.length; i<length; i++){
+    // translateX
+    let translate = [];
 
-    // temp var
-    const img = images[i];
+    // test
+    let imgObj = new Image();
 
-    // set data-attr
-    img.dataset.id = i;
 
-    img.addEventListener('click', function(event) {
-        event.preventDefault();
 
-        // add fixed for body
-        body.style.overflow = 'hidden';
 
-        // add padding-right if sroll exists
-        if(body.scrollHeight !== body.clientHeight){
-            // TODO: body.style.paddingRight = `${body.offsetWidth - body.clientWidth}px`;
-            body.style.paddingRight = '15px';
-        }
+    for(let i = 0, length = images.length; i<length; i++){
 
-        // e.target change to this
-        // render(event);
-        render(this);
-    });
+        // temp var
+        const img = images[i];
 
-}
+        // set data-attr
+        img.dataset.id = i;
 
-translateDefault();
+        img.addEventListener('click', function(event) {
+            event.preventDefault();
 
-// check insert divs
-let insertFlag = false;
+            let imgObjEvent = new Image();
 
-// check fragment 
-let fragmentFlag = false;
+            imgObjEvent.onload = function(){
 
-// close window
-backwrapper.addEventListener('click', () => {
+                const w = imgObjEvent.width;
+                const h = imgObjEvent.height;
 
-    // removed divs
-    wiev.remove();
-    backwrapper.remove();
+                wiev.style.width = `${w}px`;
+                wiev.style.height = `${h}px`;
+                wiev.style.top = `calc(${50% - h/2}px)`;
+                wiev.style.left = `calc(${50% - w/2}px)`;
+            }
+            
+            // test
+            imgObj.src = bigImages[i].href;
+            
+            // test 2
+            imgObjEvent.src = event.target.parentNode.href;                
 
-    body.style.paddingRight = '';
-    body.style.overflow = '';
 
-    // reset translate array
+            console.log(imgObj.width, imgObj.height)  
+            
+            // add fixed for body
+            body.style.overflow = 'hidden';
+
+            // add padding-right if sroll exists
+            if(body.scrollHeight !== body.clientHeight){
+                // TODO: body.style.paddingRight = `${body.offsetWidth - body.clientWidth}px`;
+                body.style.paddingRight = '15px';
+            }
+
+            // e.target change to this
+            // render(event);
+            render(this);
+        });
+
+    }
+
     translateDefault();
 
-    // flag set null
-    insertFlag = false;
+    // check insert divs
+    let insertFlag = false;
 
-});
+    // check fragment 
+    let fragmentFlag = false;
 
-// set window height 
-let innerHeight = window.innerHeight;
+    // close window
+    backwrapper.addEventListener('click', () => {
 
-// set window widht
-let innerWidth = window.innerWidth;
+        // removed divs
+        wiev.remove();
+        backwrapper.remove();
 
-// set new numbers
-window.addEventListener('resize', () => {
+        body.style.paddingRight = '';
+        body.style.overflow = '';
 
-    innerHeight = window.innerHeight;
-    innerWidth = window.innerWidth;
-});
+        // reset translate array
+        translateDefault();
 
-// wiev full image
-function render(self){
+        // flag set null
+        insertFlag = false;
 
-    console.log('innerHeight: ',innerHeight, 'innerWidth: ', innerWidth)
+    });
 
-    // TODO: widht and height proportions
-    let width = innerWidth - 40; // 40 -- padding
-    let height = innerHeight - 40; // 40 -- padding
+    // set window height 
+    let innerHeight = window.innerHeight;
 
-    // item id
-    const id = self.dataset.id;
+    // set window widht
+    let innerWidth = window.innerWidth;
 
-    // TODO: shift() and push()
-    for(let i = 0; i < id; i++){
-        let first = translate.pop(i);
-        translate.unshift(first);
+    // set new numbers
+    window.addEventListener('resize', () => {
+
+        innerHeight = window.innerHeight;
+        innerWidth = window.innerWidth;
+    });
+
+    // wiev full image
+    function render(self){
+
+        // console.log('innerHeight: ',innerHeight, 'innerWidth: ', innerWidth)
+
+        // TODO: widht and height proportions
+        let width = innerWidth - 40; // 40 -- padding
+        let height = innerHeight - 40; // 40 -- padding
+
+        // item id
+        const id = self.dataset.id;
+
+        // TODO: shift() and push()
+        for(let i = 0; i < id; i++){
+            let first = translate.pop(i);
+            translate.unshift(first);
+        }
+
+        wiev.innerHTML = returnFragment();
+
+        // check gallery. render divs if gallery exists
+        if(insertFlag === false){
+
+            // якщо розмір десктопний 4:3, якщо мобільний 3:4?
+            wiev.style.cssText = `
+                width:${width}px;
+                height:${height}px;
+                top:calc(50% - ${height/2}px);
+                left:calc(50% - ${width/2}px);
+                overflow:hidden;
+                position:fixed;
+                z-index:3;`;
+
+            // insert
+            body.append(wiev);
+
+            body.append(backwrapper);
+
+            insertFlag = true;
+        }
+
     }
 
-    wiev.innerHTML = returnFragment();
-
-    // check gallery. render divs if gallery exists
-    if(insertFlag === false){
-
-        // якщо розмір десктопний 4:3, якщо мобільний 3:4?
-        wiev.style.cssText = `
-            width:${width}px;
-            height:${height}px;
-            top:calc(50% - ${height/2}px);
-            left:calc(50% - ${width/2}px);
-            overflow:hidden;
-            position:fixed;
-            z-index:3;`;
-
-        // insert
-        body.append(wiev);
-
-        body.append(backwrapper);
-
-        insertFlag = true;
-    }
-
-}
-
-// fill default data and reset
-function translateDefault(){
-    translate = [];
-        
-    for(let i = 0, length = images.length; i<length; i++){
-    
-        // fill transform 
-        if(i === length-1){
+    // fill default data and reset
+    function translateDefault(){
+        translate = [];
             
-            translate.push(-100);
-        } else {
-    
-            translate.push(i * 100);
+        for(let i = 0, length = images.length; i<length; i++){
+        
+            // fill transform 
+            if(i === length-1){
+                
+                translate.push(-100);
+            } else {
+        
+                translate.push(i * 100);
+            }
         }
     }
-}
 
-function returnFragment(){
+    function returnFragment(){
 
-    // inline fragment for insert
-    let fragment = '';
-    
-    for(let i = 0, length = images.length; i<length; i++){
+        // inline fragment for insert
+        let fragment = '';
+        
+        for(let i = 0, length = images.length; i<length; i++){
 
-        fragment += `<img src="${bigImages[i].href}" alt="" style="transform:translateX(${translate[i]}%);">`;
+            fragment += `<img src="${bigImages[i].href}" alt="" style="transform:translateX(${translate[i]}%);">`;
+        }
+
+        return fragment;
     }
 
-    return fragment;
-}
+    /* 
+    // test sizes
+    const tempArr = [];
 
+    let img = new Image();
 
-// test sizes
-const tempArr = [];
+    img.onload = function() {
+    console.log(img.width, img.height)
 
-let img = new Image();
+    for(let i = 0, length = images.length; i<length; i++){
 
-img.onload = function() {
-  console.log(img.width, img.height)
+        tempArr.push({num: i, width: img.width, height: img.height});
+    }
+    };
 
-  for(let i = 0, length = images.length; i<length; i++){
+    for(let i = 0, length = images.length; i<length; i++){
 
-    tempArr.push({num: i, width: img.width, height: img.height});
-  }
-};
+        img.src = bigImages[i].href;
+    }
 
-for(let i = 0, length = images.length; i<length; i++){
-
-    img.src = bigImages[i].href;
-}
-
-console.log(tempArr)
-
+    console.log(tempArr)
+    */
 
 
 
-// TODO: close before mousedown 'esc'
-// TODO: left and right scroll from keyboard
+    // TODO: close before mousedown 'esc'
+    // TODO: left and right scroll from keyboard
+
+// });
