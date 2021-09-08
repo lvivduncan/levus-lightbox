@@ -28,7 +28,6 @@ for(let i = 0; i < length; i++){
             lightbox.classList.add('active');
         }, 60);
     });
-    
 }
 
 picture.append(img);
@@ -50,3 +49,5 @@ function closeLightbox(){
         lightbox.classList.remove('active');
     }, 60);
 }
+
+// TODO: body fixed, swipe slides
