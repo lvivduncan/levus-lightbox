@@ -41,7 +41,8 @@
 /* for test */
 
 
-*,::after,::before
+*,
+::after,::before
 {
     padding: 0;
     margin: 0;
@@ -63,3 +64,74 @@ body
 {
     position:fixed;z-index:2;background:rgba(0,0,0,.3);top:0;left:0;width:100vw;height:100vh;display:block;
 }
+
+
+
+
+
+
+
+#levus-lightbox
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    z-index: -1;
+    opacity: 0;
+    transition: .5s;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#levus-lightbox.active
+{
+    z-index: 1;
+    opacity: 1;
+}
+
+#levus-lightbox picture
+{
+    position: relative;
+    z-index: 3;
+    /* width: 100%; */
+    /* height: 100%; */
+
+    transition: .5s;
+    transform: scale(0,0);
+}
+
+#levus-lightbox.active picture
+{
+    transform: scale(1,1);
+}
+
+#levus-lightbox picture img
+{
+    max-width: 100%;
+    height: auto;
+}
+
+#levus-lightbox-wrapper
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.3);
+    
+    /* z-index: -1; */
+    /* opacity: 0; */
+    transition: .5s;
+    z-index: 2;
+    opacity: 1;
+}
+/* 
+#levus-lightbox.active #levus-lightbox-wrapper
+{
+} */

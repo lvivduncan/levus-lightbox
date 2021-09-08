@@ -1,223 +1,43 @@
-// 23-08-2021
+// 8-09-2021
 
-// window.addEventListener('load', function(){
+const elements = document.querySelectorAll('.levus-lightbox a');
+const length = elements.length;
+const body = document.getElementsByTagName('body')[0];
+
+const lightbox = document.createElement('div');
+lightbox.id = 'levus-lightbox';
+
+const wrapper = document.createElement('div');
+wrapper.id = 'levus-lightbox-wrapper';
+
+const picture = document.createElement('picture');
+lightbox.append(picture, wrapper);
+
+const img = document.createElement('img');
+
+for(let i = 0; i < length; i++){
+    
+    elements[i].addEventListener('click', event => {
+        event.preventDefault();
         
-    // 1 gallery. TODO: all gallery
-    const gallery = document.querySelector('.levus-lightbox');
+        img.alt = elements[i].title;
+        img.src = elements[i].href;
 
-    // links to full image
-    const bigImages = gallery.querySelectorAll('a');
-
-    // small images
-    const images = gallery.querySelectorAll('img');
-
-    const body = document.getElementsByTagName('body')[0];
-    body.style.position = 'relative';
-
-    // create full block
-    const wiev = document.createElement('div');
-    wiev.setAttribute('id', 'levus-lightbox-wiev');
-
-    // create click-block for close
-    const backwrapper = document.createElement('div');
-    backwrapper.setAttribute('id', 'levus-lightbox-backwrapper');
-
-    // translateX
-    let translate = [];
-
-    // test
-    let imgObj = new Image();
-
-
-
-
-    for(let i = 0, length = images.length; i<length; i++){
-
-        // temp var
-        const img = images[i];
-
-        // set data-attr
-        img.dataset.id = i;
-
-        img.addEventListener('click', function(event) {
-            event.preventDefault();
-
-            let imgObjEvent = new Image();
-
-            imgObjEvent.onload = function(){
-
-                const w = imgObjEvent.width;
-                const h = imgObjEvent.height;
-
-                wiev.style.width = `${w}px`;
-                wiev.style.height = `${h}px`;
-                wiev.style.top = `calc(${50% - h/2}px)`;
-                wiev.style.left = `calc(${50% - w/2}px)`;
-            }
+        setTimeout(() => {
             
-            // test
-            imgObj.src = bigImages[i].href;
-            
-            // test 2
-            imgObjEvent.src = event.target.parentNode.href;                
-
-
-            console.log(imgObj.width, imgObj.height)  
-            
-            // add fixed for body
-            body.style.overflow = 'hidden';
-
-            // add padding-right if sroll exists
-            if(body.scrollHeight !== body.clientHeight){
-                // TODO: body.style.paddingRight = `${body.offsetWidth - body.clientWidth}px`;
-                body.style.paddingRight = '15px';
-            }
-
-            // e.target change to this
-            // render(event);
-            render(this);
-        });
-
-    }
-
-    translateDefault();
-
-    // check insert divs
-    let insertFlag = false;
-
-    // check fragment 
-    let fragmentFlag = false;
-
-    // close window
-    backwrapper.addEventListener('click', () => {
-
-        // removed divs
-        wiev.remove();
-        backwrapper.remove();
-
-        body.style.paddingRight = '';
-        body.style.overflow = '';
-
-        // reset translate array
-        translateDefault();
-
-        // flag set null
-        insertFlag = false;
-
+            lightbox.classList.add('active');
+        }, 60);
     });
+    
+}
 
-    // set window height 
-    let innerHeight = window.innerHeight;
+picture.append(img);
+body.append(lightbox);
 
-    // set window widht
-    let innerWidth = window.innerWidth;
+wrapper.addEventListener('click', () => {
 
-    // set new numbers
-    window.addEventListener('resize', () => {
-
-        innerHeight = window.innerHeight;
-        innerWidth = window.innerWidth;
-    });
-
-    // wiev full image
-    function render(self){
-
-        // console.log('innerHeight: ',innerHeight, 'innerWidth: ', innerWidth)
-
-        // TODO: widht and height proportions
-        let width = innerWidth - 40; // 40 -- padding
-        let height = innerHeight - 40; // 40 -- padding
-
-        // item id
-        const id = self.dataset.id;
-
-        // TODO: shift() and push()
-        for(let i = 0; i < id; i++){
-            let first = translate.pop(i);
-            translate.unshift(first);
-        }
-
-        wiev.innerHTML = returnFragment();
-
-        // check gallery. render divs if gallery exists
-        if(insertFlag === false){
-
-            // якщо розмір десктопний 4:3, якщо мобільний 3:4?
-            wiev.style.cssText = `
-                width:${width}px;
-                height:${height}px;
-                top:calc(50% - ${height/2}px);
-                left:calc(50% - ${width/2}px);
-                overflow:hidden;
-                position:fixed;
-                z-index:3;`;
-
-            // insert
-            body.append(wiev);
-
-            body.append(backwrapper);
-
-            insertFlag = true;
-        }
-
-    }
-
-    // fill default data and reset
-    function translateDefault(){
-        translate = [];
-            
-        for(let i = 0, length = images.length; i<length; i++){
+    setTimeout(() => {
         
-            // fill transform 
-            if(i === length-1){
-                
-                translate.push(-100);
-            } else {
-        
-                translate.push(i * 100);
-            }
-        }
-    }
-
-    function returnFragment(){
-
-        // inline fragment for insert
-        let fragment = '';
-        
-        for(let i = 0, length = images.length; i<length; i++){
-
-            fragment += `<img src="${bigImages[i].href}" alt="" style="transform:translateX(${translate[i]}%);">`;
-        }
-
-        return fragment;
-    }
-
-    /* 
-    // test sizes
-    const tempArr = [];
-
-    let img = new Image();
-
-    img.onload = function() {
-    console.log(img.width, img.height)
-
-    for(let i = 0, length = images.length; i<length; i++){
-
-        tempArr.push({num: i, width: img.width, height: img.height});
-    }
-    };
-
-    for(let i = 0, length = images.length; i<length; i++){
-
-        img.src = bigImages[i].href;
-    }
-
-    console.log(tempArr)
-    */
-
-
-
-    // TODO: close before mousedown 'esc'
-    // TODO: left and right scroll from keyboard
-
-// });
+        lightbox.classList.remove('active');
+    }, 60);
+});
