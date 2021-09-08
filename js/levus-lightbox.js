@@ -34,10 +34,19 @@ for(let i = 0; i < length; i++){
 picture.append(img);
 body.append(lightbox);
 
-wrapper.addEventListener('click', () => {
+wrapper.addEventListener('click', closeLightbox);
 
+document.addEventListener('keydown', event => {
+
+    if(event.key == 'Escape' || event.code == 'Escape'){
+
+        closeLightbox();
+    }
+});
+
+function closeLightbox(){
     setTimeout(() => {
         
         lightbox.classList.remove('active');
     }, 60);
-});
+}
