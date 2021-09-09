@@ -51,3 +51,13 @@ function closeLightbox(){
 }
 
 // TODO: body fixed, swipe slides
+// TODO: array elements
+
+
+/*
+
+pointerdown
+pointermove
+pointerup
+
+*/
