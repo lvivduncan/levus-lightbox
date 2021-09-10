@@ -61,13 +61,54 @@
             }
         });
 
-        // close lightbox
         document.addEventListener('keydown', event => {
-
+            
+            // close lightbox
             if(event.key === 'Escape' || event.code === 'Escape'){
 
                 closeLightbox();
             }
+
+            // to left
+            if(event.key === 'ArrowLeft' || event.code === 'ArrowLeft'){
+
+                console.log('left')
+
+                const first = translate.pop();
+                translate.unshift(first);
+            }
+
+            // to right
+            if(event.key === 'ArrowRight' || event.code === 'ArrowRight'){
+                
+                console.log('right')
+
+                const last = translate.shift();
+                translate.push(last);
+            }
+
+
+
+            const newPictures = document.querySelectorAll('#levus-lightbox picture');
+
+            for(let i = 0; i < length; i++){
+
+                if(translate[i] === 0){
+
+                    opacity = 1;
+                } else {
+                    
+                    opacity = 0;
+                }
+
+                newPictures[i].style.transform = `translateX(${translate[i]}%)`;
+                newPictures[i].style.opacity = opacity;
+            }
+
+
+
+
+
         });
 
         // touch variables
@@ -141,6 +182,7 @@
 
                 event.target.classList.remove('touch');
 
+                // TODO: bug! this all pictures!
                 const newPictures = document.querySelectorAll('#levus-lightbox picture');
 
                 for(let i = 0; i < length; i++){
