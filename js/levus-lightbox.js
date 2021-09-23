@@ -1,5 +1,7 @@
 // 8-09-2021
 
+// TODO: вибірка тільки з 1 галереї
+
 {
     const allLightboxs = document.querySelectorAll('.levus-lightbox');
 
@@ -72,8 +74,6 @@
             // to left
             if(event.key === 'ArrowLeft' || event.code === 'ArrowLeft'){
 
-                console.log('left')
-
                 const first = translate.pop();
                 translate.unshift(first);
             }
@@ -81,13 +81,9 @@
             // to right
             if(event.key === 'ArrowRight' || event.code === 'ArrowRight'){
                 
-                console.log('right')
-
                 const last = translate.shift();
                 translate.push(last);
             }
-
-
 
             const newPictures = document.querySelectorAll('#levus-lightbox picture');
 
@@ -101,14 +97,9 @@
                     opacity = 0;
                 }
 
-                newPictures[i].style.transform = `translateX(${translate[i]}%)`;
-                newPictures[i].style.opacity = opacity;
+                newPictures[i] && (newPictures[i].style.transform = `translateX(${translate[i]}%)`);
+                newPictures[i] && (newPictures[i].style.opacity = opacity);
             }
-
-
-
-
-
         });
 
         // touch variables
