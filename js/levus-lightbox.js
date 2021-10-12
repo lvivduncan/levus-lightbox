@@ -173,7 +173,6 @@
 
                 event.target.classList.remove('touch');
 
-                // TODO: bug! this all pictures!
                 const newPictures = document.querySelectorAll('#levus-lightbox picture');
 
                 for(let i = 0; i < length; i++){
@@ -197,6 +196,9 @@
 
         // open lightbox after click
         function openLightbox(i){
+
+            // test
+            insertData = '';
 
             // check i
             if(i!==0){
@@ -261,6 +263,9 @@
 
         function setTransition(){
 
+            // clear lightbox content
+            // insertData = '';
+
             translate.length = 0;
 
             for(let i = 0; i < length; i++){
@@ -277,4 +282,6 @@
     });
 }
 
-// 10-09-2021
+// 12-09-2021
+
+// TODO: баг, якщо був скрол -- тоді галерею відкриває нe з того зображення, на яке клікнули
